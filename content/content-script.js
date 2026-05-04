@@ -1,7 +1,49 @@
-// Runs inside the webpage
-
 function extractText() {
-	return document.body.innerText;
+	const selectors = [
+		"article",
+		"main",
+		'[role="main"]',
+		".post-content",
+		"#content",
+	];
+	let contentArea = null;
+
+	for (const selector of selectors) {
+		const found = document.querySelector(selector);
+		if (found) {
+			contentArea = found;
+			break;
+		}
+	}
+
+	const root = contentArea || document.body;
+	const clone = root.cloneNode(true);
+
+	const noiseSelectors = [
+		"nav",
+		"header",
+		"footer",
+		"aside",
+		"script",
+		"style",
+		"noscript",
+		".sidebar",
+		".ad",
+		".ads",
+		".menu",
+		".social-share",
+		".comments",
+	];
+
+	noiseSelectors.forEach((selector) => {
+		clone.querySelectorAll(selector).forEach((el) => el.remove());
+	});
+
+	return clone.innerText
+		.split("\n")
+		.map((line) => line.trim())
+		.filter((line) => line.length > 0)
+		.join("\n");
 }
 
 function highlightSpecificWords(keywords) {
