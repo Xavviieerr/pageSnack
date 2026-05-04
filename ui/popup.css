@@ -32,6 +32,9 @@ body {
 
 header {
 	margin-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
 }
 
 header h1 {
@@ -47,6 +50,24 @@ header h1 span {
 header p {
 	font-size: 12px;
 	color: var(--text-muted);
+}
+
+.btn-clear {
+	background: rgba(255, 255, 255, 0.1);
+	color: var(--text-muted);
+	font-size: 11px;
+	padding: 4px 10px;
+	border-radius: 6px;
+	width: auto;
+	box-shadow: none;
+	transition: all 0.2s ease;
+}
+
+.btn-clear:hover {
+	background: rgba(255, 255, 255, 0.2);
+	color: var(--text-main);
+	transform: none;
+	box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
 main {

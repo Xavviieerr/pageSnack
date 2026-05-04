@@ -1,5 +1,12 @@
 const summarizeBtn = document.getElementById("summarize");
+const clearBtn = document.getElementById("clear");
 const outputDiv = document.getElementById("output");
+
+const placeholderHTML = `<p class="placeholder">Click summarize to get insights from this page.</p>`;
+
+clearBtn.onclick = () => {
+	outputDiv.innerHTML = placeholderHTML;
+};
 
 summarizeBtn.onclick = async () => {
 	try {
@@ -29,24 +36,22 @@ summarizeBtn.onclick = async () => {
 		if (!res || !res.text) throw new Error("Could not extract text from page");
 
 		// Get summary from background
-		// const summaryResult = await chrome.runtime.sendMessage({
-		// 	type: "SUMMARIZE",
-		// 	payload: { text: res.text },
-		// });
+		const summaryResult = await chrome.runtime.sendMessage({
+			type: "SUMMARIZE",
+			payload: { text: res.text },
+		});
 
-		// if (!summaryResult) throw new Error("Failed to generate summary");
+		if (!summaryResult) throw new Error("Failed to generate summary");
 
-		// console.log("Summary result", summaryResult);
-		//outputDiv.innerText = summaryResult.summary;
-		console.log(res.text);
-		outputDiv.innerText = res;
+		console.log("Summary result", summaryResult);
+		outputDiv.innerText = summaryResult.summary;
 
-		// if (summaryResult.keywords) {
-		// 	chrome.tabs.sendMessage(tab.id, {
-		// 		type: "HIGHLIGHT",
-		// 		keywords: summaryResult.keywords,
-		// 	});
-		// }
+		if (summaryResult.keywords) {
+			chrome.tabs.sendMessage(tab.id, {
+				type: "HIGHLIGHT",
+				keywords: summaryResult.keywords,
+			});
+		}
 	} catch (error) {
 		console.error("Popup error:", error);
 		outputDiv.innerHTML = `<span style="color: #ff4d4d; font-size: 13px;">${error.message}</span>`;
