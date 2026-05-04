@@ -12,13 +12,26 @@
 <body>
     <div class="container">
         <header>
-            <h1>Page<span>Snack</span></h1>
-            <p>AI Summary & Insights</p>
+            <div class="header-content">
+                <h1>Page<span>Snack</span></h1>
+                <p>AI Summary & Insights</p>
+            </div>
+            <button id="clear" class="btn-clear" title="Clear summary">Clear</button>
         </header>
 
         <main>
+            <div id="page-info" class="page-info">
+                <h2 id="page-title">Loading title...</h2>
+                <span id="reading-time"></span>
+            </div>
+            
             <div id="output" class="output-area">
                 <p class="placeholder">Click summarize to get insights from this page.</p>
+            </div>
+
+            <div id="insights-container" class="insights-container" style="display: none;">
+                <h3>Key Insights</h3>
+                <p id="insights-text"></p>
             </div>
         </main>
 

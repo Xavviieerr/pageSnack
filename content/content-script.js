@@ -1,7 +1,53 @@
-// Runs inside the webpage
-
 function extractText() {
-	return document.body.innerText;
+	const selectors = [
+		"article",
+		"main",
+		'[role="main"]',
+		".post-content",
+		"#content",
+	];
+	let contentArea = null;
+
+	for (const selector of selectors) {
+		const found = document.querySelector(selector);
+		if (found) {
+			contentArea = found;
+			break;
+		}
+	}
+
+	const root = contentArea || document.body;
+	const clone = root.cloneNode(true);
+
+	const noiseSelectors = [
+		"nav",
+		"header",
+		"footer",
+		"aside",
+		"script",
+		"style",
+		"noscript",
+		".sidebar",
+		".ad",
+		".ads",
+		".menu",
+		".social-share",
+		".comments",
+	];
+
+	noiseSelectors.forEach((selector) => {
+		clone.querySelectorAll(selector).forEach((el) => el.remove());
+	});
+
+	return {
+		title: document.title,
+		text: clone.innerText
+			.split("\n")
+			.map((line) => line.trim())
+			.filter((line) => line.length > 0)
+			.join("\n")
+			.substring(0, 10000),
+	};
 }
 
 function highlightSpecificWords(keywords) {
@@ -35,8 +81,8 @@ function highlightSpecificWords(keywords) {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 	if (msg.type === "EXTRACT_PAGE") {
-		const text = extractText();
-		sendResponse({ text });
+		const result = extractText();
+		sendResponse(result);
 	}
 
 	if (msg.type === "HIGHLIGHT") {
