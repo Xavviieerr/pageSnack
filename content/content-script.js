@@ -39,11 +39,15 @@ function extractText() {
 		clone.querySelectorAll(selector).forEach((el) => el.remove());
 	});
 
-	return clone.innerText
-		.split("\n")
-		.map((line) => line.trim())
-		.filter((line) => line.length > 0)
-		.join("\n");
+	return {
+		title: document.title,
+		text: clone.innerText
+			.split("\n")
+			.map((line) => line.trim())
+			.filter((line) => line.length > 0)
+			.join("\n")
+			.substring(0, 10000),
+	};
 }
 
 function highlightSpecificWords(keywords) {
@@ -77,8 +81,8 @@ function highlightSpecificWords(keywords) {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 	if (msg.type === "EXTRACT_PAGE") {
-		const text = extractText();
-		sendResponse({ text });
+		const result = extractText();
+		sendResponse(result);
 	}
 
 	if (msg.type === "HIGHLIGHT") {
