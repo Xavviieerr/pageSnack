@@ -26,6 +26,7 @@ summarizeBtn.onclick = async () => {
 	try {
 		summarizeBtn.disabled = true;
 		summarizeBtn.innerHTML = '<span class="spinner"></span> Summarizing...';
+		//using innerTex instead of innerHtml prevents xss attacks
 		outputDiv.innerText = "";
 		insightsContainer.style.display = "none";
 
